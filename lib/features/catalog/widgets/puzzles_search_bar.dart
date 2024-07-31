@@ -15,6 +15,7 @@ class PuzzlesSearchBar extends StatelessWidget {
             const WidgetStatePropertyAll(EdgeInsets.only(left: 16, right: 8)),
         barHintText: 'Поиск',
         barTrailing: [
+          // TODO: Логика
           IconButton(
               onPressed: () {}, icon: const Icon(Icons.camera_alt_outlined))
         ],

@@ -6,9 +6,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:puzzle_master/features/catalog/bloc/catalog_cubit/catalog_cubit.dart';
-import 'package:puzzle_master/repositories/catalog/catalog_repository.dart';
-
+import '../features/catalog/bloc/catalog_bloc/catalog_bloc.dart';
 import '../repositories/settings/settings_repository.dart';
 
 import 'bloc/bloc.dart';
@@ -29,7 +27,7 @@ class App extends StatelessWidget {
               SettingsCubit(SettingsRepository(_sharedPreferences)),
         ),
         BlocProvider(
-          create: (context) => CatalogCubit(const CatalogRepository()),
+          create: (context) => CatalogBloc(),
         ),
       ],
       child: BlocBuilder<SettingsCubit, SettingsState>(

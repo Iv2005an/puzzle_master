@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 import 'package:puzzle_master/app/bloc/settings_cubit/settings_cubit.dart';
-import 'package:puzzle_master/features/settings/widgets/option_card.dart';
+import 'option_card.dart';
 
 class SelectAccentColorCard extends StatelessWidget {
   const SelectAccentColorCard({super.key});

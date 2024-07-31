@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:puzzle_master/app/themes/themes.dart';
-import 'package:puzzle_master/features/settings/widgets/select_accent_color_card.dart';
-import 'package:puzzle_master/features/settings/widgets/select_theme_card.dart';
+import '../widgets/widgets.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});

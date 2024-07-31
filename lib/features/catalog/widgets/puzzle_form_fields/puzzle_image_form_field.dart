@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:puzzle_master/repositories/catalog/models/puzzle.dart';
 import 'package:puzzle_master/services/image_service.dart';
 
-class ImageFormField extends StatelessWidget {
-  const ImageFormField(this._newPuzzle, {super.key});
+class PuzzleImageFormField extends StatelessWidget {
+  const PuzzleImageFormField({
+    required this.initialValue,
+    required this.onChanged,
+    super.key,
+  });
 
-  final Puzzle _newPuzzle;
+  final Uint8List? initialValue;
+  final void Function(Uint8List) onChanged;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return FormField<Uint8List>(
+        initialValue: initialValue,
         validator: (value) => value == null ? '' : null,
         builder: (field) {
           RoundedRectangleBorder? cardBorder;
@@ -26,12 +31,16 @@ class ImageFormField extends StatelessWidget {
                       : theme.colorScheme.error));
           return Card.outlined(
             shape: cardBorder,
+            color: Colors.transparent,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
                   field.value == null
-                      ? const Row(children: [Text('Выберите изображение*')])
+                      ? Row(children: [
+                          Text('Выберите изображение*',
+                              style: TextStyle(color: theme.colorScheme.error))
+                        ])
                       : ClipRRect(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(8)),
@@ -46,7 +55,7 @@ class ImageFormField extends StatelessWidget {
                               Uint8List? image =
                                   await ImageService.pickImageFromCamera();
                               if (image != null) {
-                                _newPuzzle.image = image;
+                                onChanged(image);
                                 field.didChange(image);
                               }
                             },
@@ -60,7 +69,7 @@ class ImageFormField extends StatelessWidget {
                                 Uint8List? image =
                                     await ImageService.pickImageFromGallery();
                                 if (image != null) {
-                                  _newPuzzle.image = image;
+                                  onChanged(image);
                                   field.didChange(image);
                                 }
                               },
