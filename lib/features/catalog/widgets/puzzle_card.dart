@@ -56,6 +56,7 @@ class PuzzleCard extends StatelessWidget {
               // TODO: Логика
               : IconButton.outlined(
                   onPressed: () {}, icon: const Icon(Icons.favorite_outline)),
+          const SizedBox(width: 4),
           // TODO: Логика
           FilledButton(onPressed: () {}, child: const Text('Сканирование')),
         ]),
