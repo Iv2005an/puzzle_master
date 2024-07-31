@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:puzzle_master/repositories/catalog/models/puzzle.dart';
+import 'package:puzzle_master/services/converter_service.dart';
 
 class PuzzleCard extends StatelessWidget {
   const PuzzleCard(this.puzzle, {super.key});
@@ -30,11 +31,11 @@ class PuzzleCard extends StatelessWidget {
           Chip(
             avatar:
                 const RotatedBox(quarterTurns: 1, child: Icon(Icons.height)),
-            label: Text('${puzzle.width}'),
+            label: Text(ConverterService.doubleToString(puzzle.width)),
           ),
           Chip(
             avatar: const Icon(Icons.height),
-            label: Text('${puzzle.height}'),
+            label: Text(ConverterService.doubleToString(puzzle.height)),
           ),
         ],
       ),
