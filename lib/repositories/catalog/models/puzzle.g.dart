@@ -17,39 +17,42 @@ class PuzzleAdapter extends TypeAdapter<Puzzle> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Puzzle(
-      fields[0] as Uint8List,
-      fields[1] as String,
-      fields[2] as int,
-      fields[3] as double,
+      fields[0] as int?,
+      fields[1] as Uint8List,
+      fields[2] as String,
+      fields[3] as int,
       fields[4] as double,
-      fields[5] as String,
+      fields[5] as double,
       fields[6] as String,
-      fields[7] as bool,
+      fields[7] as String,
       fields[8] as bool,
+      fields[9] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Puzzle obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
-      ..write(obj.image)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.title)
+      ..write(obj.image)
       ..writeByte(2)
-      ..write(obj.elementsCount)
+      ..write(obj.title)
       ..writeByte(3)
-      ..write(obj.width)
+      ..write(obj.elementsCount)
       ..writeByte(4)
-      ..write(obj.height)
+      ..write(obj.width)
       ..writeByte(5)
-      ..write(obj.factory)
+      ..write(obj.height)
       ..writeByte(6)
-      ..write(obj.article)
+      ..write(obj.factory)
       ..writeByte(7)
-      ..write(obj.isFavorite)
+      ..write(obj.article)
       ..writeByte(8)
+      ..write(obj.isFavorite)
+      ..writeByte(9)
       ..write(obj.isInHistory);
   }
 

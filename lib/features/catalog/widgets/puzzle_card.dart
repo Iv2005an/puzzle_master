@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:puzzle_master/repositories/catalog/models/puzzle.dart';
 import 'package:puzzle_master/services/converter_service.dart';
+
+import '../bloc/catalog_bloc/catalog_bloc.dart';
 
 class PuzzleCard extends StatelessWidget {
   const PuzzleCard(this.puzzle, {super.key});
@@ -43,7 +46,9 @@ class PuzzleCard extends StatelessWidget {
         Row(children: [
           // TODO: Логика
           IconButton.outlined(
-              onPressed: () {}, icon: const Icon(Icons.delete_outline)),
+              onPressed: () =>
+                  context.read<CatalogBloc>().add(CatalogDeletePuzzle(puzzle)),
+              icon: const Icon(Icons.delete_outline)),
           // TODO: Логика
           IconButton.outlined(
               onPressed: () {}, icon: const Icon(Icons.edit_outlined)),

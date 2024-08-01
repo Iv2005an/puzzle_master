@@ -4,16 +4,20 @@ import 'models/puzzle.dart';
 
 class CatalogRepository {
   static const puzzlesStorageName = 'puzzles';
+  static final Box<Puzzle> puzzleStorage = Hive.box<Puzzle>(puzzlesStorageName);
 
-  static List<Puzzle> getPuzzles() =>
-      Hive.box<Puzzle>(puzzlesStorageName).values.toList();
+  static List<Puzzle> get puzzles {
+    final puzzles = puzzleStorage.values.toList();
+    return List.generate(
+        puzzles.length, (index) => puzzles[index].copyWithId(index));
+  }
 
-  static void addPuzzle(Puzzle newPuzzle) =>
-      Hive.box<Puzzle>(puzzlesStorageName).add(newPuzzle);
+  static Future<void> addPuzzle(Puzzle newPuzzle) async =>
+      await puzzleStorage.add(newPuzzle);
 
-//TODO: Логика удаления пазла
-  static void deletePuzzle(Puzzle puzzle) {
-    throw UnimplementedError();
+  static Future<void> deletePuzzle(Puzzle puzzle) async {
+    assert(puzzle.id != null, 'Id must not be null');
+    await puzzleStorage.deleteAt(puzzle.id!);
   }
 
   //TODO: Логика изменения пазла

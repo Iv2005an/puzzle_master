@@ -11,17 +11,23 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   CatalogBloc() : super(CatalogInitial()) {
     on<CatalogGetPuzzles>((event, emit) {
       try {
-        final puzzles = CatalogRepository.getPuzzles();
-        emit(CatalogLoaded(puzzles));
+        emit(CatalogLoaded(CatalogRepository.puzzles));
       } catch (e) {
         emit(CatalogFailure(e));
       }
     });
-    on<CatalogAddPuzzle>((event, emit) {
-      CatalogRepository.addPuzzle(event.newPuzzle);
+    on<CatalogAddPuzzle>((event, emit) async {
+      await CatalogRepository.addPuzzle(event.newPuzzle);
       try {
-        final puzzles = CatalogRepository.getPuzzles();
-        emit(CatalogLoaded(puzzles));
+        emit(CatalogLoaded(CatalogRepository.puzzles));
+      } catch (e) {
+        emit(CatalogFailure(e));
+      }
+    });
+    on<CatalogDeletePuzzle>((event, emit) async {
+      await CatalogRepository.deletePuzzle(event.puzzleToDelete);
+      try {
+        emit(CatalogLoaded(CatalogRepository.puzzles));
       } catch (e) {
         emit(CatalogFailure(e));
       }

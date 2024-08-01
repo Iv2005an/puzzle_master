@@ -17,3 +17,11 @@ final class CatalogAddPuzzle extends CatalogEvent {
   @override
   List<Object> get props => [newPuzzle];
 }
+final class CatalogDeletePuzzle extends CatalogEvent {
+  const CatalogDeletePuzzle(this.puzzleToDelete);
+
+  final Puzzle puzzleToDelete;
+
+  @override
+  List<Object> get props => [puzzleToDelete];
+}

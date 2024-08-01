@@ -105,6 +105,7 @@ class _AddPuzzleFormState extends State<AddPuzzleForm> {
                           ? () {
                               context.read<CatalogBloc>().add(CatalogAddPuzzle(
                                   Puzzle(
+                                      null,
                                       image!,
                                       title!.trim(),
                                       elementsCount!,

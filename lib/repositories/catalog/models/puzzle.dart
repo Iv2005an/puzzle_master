@@ -7,41 +7,44 @@ part 'puzzle.g.dart';
 @HiveType(typeId: 0)
 class Puzzle extends Equatable {
   const Puzzle(
-    this.image,
-    this.title,
-    this.elementsCount,
-    this.width,
-    this.height,
-    this.factory,
-    this.article,
-    this.isFavorite,
-    this.isInHistory
-  );
+      this.id,
+      this.image,
+      this.title,
+      this.elementsCount,
+      this.width,
+      this.height,
+      this.factory,
+      this.article,
+      this.isFavorite,
+      this.isInHistory);
   @HiveField(0)
-  final Uint8List image;
+  final int? id;
 
   @HiveField(1)
-  final String title;
+  final Uint8List image;
 
   @HiveField(2)
-  final int elementsCount;
+  final String title;
 
   @HiveField(3)
-  final double width;
+  final int elementsCount;
 
   @HiveField(4)
-  final double height;
+  final double width;
 
   @HiveField(5)
-  final String factory;
+  final double height;
 
   @HiveField(6)
-  final String article;
+  final String factory;
 
   @HiveField(7)
-  final bool isFavorite;
+  final String article;
 
   @HiveField(8)
+  final bool isFavorite;
+
+  @HiveField(9)
   final bool isInHistory;
 
   @override
@@ -53,6 +56,10 @@ class Puzzle extends Equatable {
         height,
         factory,
         article,
-        isFavorite
+        isFavorite,
+        isInHistory
       ];
+
+  Puzzle copyWithId(int id) => Puzzle(id, image, title, elementsCount, width,
+      height, factory, article, isFavorite, isInHistory);
 }
