@@ -15,58 +15,52 @@ class CatalogScreen extends StatelessWidget {
         final bloc = context.read<CatalogBloc>();
         if (state is CatalogInitial) bloc.add(CatalogGetPuzzles());
         if (state is CatalogLoaded) {
-          return Scaffold(
-            floatingActionButton: FloatingActionButton(
-                elevation: 0,
-                tooltip: 'Добавить пазл',
-                onPressed: () => showModalBottomSheet(
-                      useRootNavigator: true,
-                      useSafeArea: true,
-                      isDismissible: false,
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (context) => Padding(
-                        padding: MediaQuery.of(context).viewInsets,
-                        child: const AddPuzzleForm(),
-                      ),
-                    ),
-                child: const Icon(Icons.add_photo_alternate_outlined)),
-            body: DefaultTabController(
-              length: 3,
-              child: Column(
-                children: [
-                  const SizedBox(height: 32),
-                  const PuzzlesSearchBar(),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Wrap(
-                      spacing: 8,
-                      children: [
-                        Chip(label: Text('data')),
-                        Chip(label: Text('data')),
-                        Chip(label: Text('data')),
-                        Chip(label: Text('data')),
-                        Chip(label: Text('data')),
-                        Chip(label: Text('data')),
-                      ],
-                    ),
-                  ),
-                  const TabBar(
-                    tabs: [
-                      Tab(child: Text('Все')),
-                      Tab(child: Text('Избранное')),
-                      Tab(child: Text('История')),
+          return DefaultTabController(
+            length: 3,
+            child: Column(
+              children: [
+                const SizedBox(height: 32),
+                const PuzzlesSearchBar(),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Wrap(
+                    spacing: 8,
+                    children: [
+                      Chip(label: Text('data')),
+                      Chip(label: Text('data')),
+                      Chip(label: Text('data')),
+                      Chip(label: Text('data')),
+                      Chip(label: Text('data')),
+                      Chip(label: Text('data')),
                     ],
                   ),
-                  Expanded(
-                    child: TabBarView(children: [
-                      PuzzlesList(state.puzzles),
-                      PuzzlesList(state.puzzles),
-                      PuzzlesList(state.puzzles),
-                    ]),
-                  )
-                ],
-              ),
+                ),
+                const TabBar(
+                  tabs: [
+                    Tab(child: Text('Все')),
+                    Tab(child: Text('Избранное')),
+                    Tab(child: Text('История')),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(children: [
+                    PuzzlesList(
+                      state.puzzles,
+                      isAddButton: true,
+                    ),
+                    PuzzlesList(
+                      state.puzzles
+                          .where((element) => element.isFavorite)
+                          .toList(),
+                    ),
+                    PuzzlesList(
+                      state.puzzles
+                          .where((element) => element.isInHistory)
+                          .toList(),
+                    ),
+                  ]),
+                )
+              ],
             ),
           );
         }

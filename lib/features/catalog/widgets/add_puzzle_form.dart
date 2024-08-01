@@ -103,18 +103,17 @@ class _AddPuzzleFormState extends State<AddPuzzleForm> {
                   child: FilledButton(
                       onPressed: isAddButtonEnabled
                           ? () {
-                              context
-                                  .read<CatalogBloc>()
-                                  .add(CatalogAddPuzzle(Puzzle(
-                                    image!,
-                                    title!.trim(),
-                                    elementsCount!,
-                                    width!,
-                                    height!,
-                                    factory.trim(),
-                                    article.trim(),
-                                    false,
-                                  )));
+                              context.read<CatalogBloc>().add(CatalogAddPuzzle(
+                                  Puzzle(
+                                      image!,
+                                      title!.trim(),
+                                      elementsCount!,
+                                      width!,
+                                      height!,
+                                      factory.trim(),
+                                      article.trim(),
+                                      false,
+                                      false)));
                               context.pop();
                             }
                           : null,

@@ -15,6 +15,7 @@ class Puzzle extends Equatable {
     this.factory,
     this.article,
     this.isFavorite,
+    this.isInHistory
   );
   @HiveField(0)
   final Uint8List image;
@@ -39,6 +40,9 @@ class Puzzle extends Equatable {
 
   @HiveField(7)
   final bool isFavorite;
+
+  @HiveField(8)
+  final bool isInHistory;
 
   @override
   List<Object?> get props => [

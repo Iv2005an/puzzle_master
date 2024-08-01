@@ -25,13 +25,14 @@ class PuzzleAdapter extends TypeAdapter<Puzzle> {
       fields[5] as String,
       fields[6] as String,
       fields[7] as bool,
+      fields[8] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Puzzle obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.image)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class PuzzleAdapter extends TypeAdapter<Puzzle> {
       ..writeByte(6)
       ..write(obj.article)
       ..writeByte(7)
-      ..write(obj.isFavorite);
+      ..write(obj.isFavorite)
+      ..writeByte(8)
+      ..write(obj.isInHistory);
   }
 
   @override
