@@ -46,8 +46,44 @@ class PuzzleCard extends StatelessWidget {
         Row(children: [
           // TODO: Логика
           IconButton.outlined(
-              onPressed: () =>
-                  context.read<CatalogBloc>().add(CatalogDeletePuzzle(puzzle)),
+              onPressed: () => showModalBottomSheet(
+                  builder: (context) {
+                    return SizedBox(
+                      height: 92,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              puzzle.title,
+                              style: theme.textTheme.titleLarge,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: OutlinedButton(
+                                      onPressed: () {
+                                        context
+                                            .read<CatalogBloc>()
+                                            .add(CatalogDeletePuzzle(puzzle));
+                                        context.pop();
+                                      },
+                                      child: const Text('Удалить')),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: FilledButton(
+                                      onPressed: () => context.pop(),
+                                      child: const Text('Отмена')),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  context: context),
               icon: const Icon(Icons.delete_outline)),
           // TODO: Логика
           IconButton.outlined(
