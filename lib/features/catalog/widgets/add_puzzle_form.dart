@@ -107,12 +107,12 @@ class _AddPuzzleFormState extends State<AddPuzzleForm> {
                                   .read<CatalogBloc>()
                                   .add(CatalogAddPuzzle(Puzzle(
                                     image!,
-                                    title!,
+                                    title!.trim(),
                                     elementsCount!,
                                     width!,
                                     height!,
-                                    factory,
-                                    article,
+                                    factory.trim(),
+                                    article.trim(),
                                     false,
                                   )));
                               context.pop();
