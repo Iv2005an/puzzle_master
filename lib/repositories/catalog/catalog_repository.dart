@@ -9,7 +9,7 @@ class CatalogRepository {
   static List<Puzzle> get puzzles {
     final puzzles = puzzleStorage.values.toList();
     return List.generate(
-        puzzles.length, (index) => puzzles[index].copyWithId(index));
+        puzzles.length, (index) => puzzles[index].copyWith(id: index));
   }
 
   static Future<void> addPuzzle(Puzzle newPuzzle) async =>
@@ -20,8 +20,8 @@ class CatalogRepository {
     await puzzleStorage.deleteAt(puzzle.id!);
   }
 
-  //TODO: Логика изменения пазла
-  static void editPuzzle(Puzzle puzzle) {
-    throw UnimplementedError();
+  static Future<void> editPuzzle(Puzzle puzzle) async {
+    assert(puzzle.id != null, 'Id must not be null');
+    await puzzleStorage.putAt(puzzle.id!, puzzle);
   }
 }

@@ -10,17 +10,21 @@ import '../bloc/catalog_bloc/catalog_bloc.dart';
 
 import 'puzzle_form_fields/puzzle_form_fields.dart';
 
-class AddPuzzleForm extends StatefulWidget {
-  const AddPuzzleForm({super.key});
+class PuzzleDataDialog extends StatefulWidget {
+  const PuzzleDataDialog({this.puzzleToEdit, super.key});
+
+  final Puzzle? puzzleToEdit;
 
   @override
-  State<AddPuzzleForm> createState() => _AddPuzzleFormState();
+  State<PuzzleDataDialog> createState() => _PuzzleDataDialogState();
 }
 
-class _AddPuzzleFormState extends State<AddPuzzleForm> {
+class _PuzzleDataDialogState extends State<PuzzleDataDialog> {
   final formKey = GlobalKey<FormState>();
   bool isAddButtonEnabled = false;
+  bool isEditMode = false;
 
+  int? id;
   Uint8List? image;
   String? title;
   int? elementsCount;
@@ -28,6 +32,23 @@ class _AddPuzzleFormState extends State<AddPuzzleForm> {
   double? height;
   String article = '';
   String factory = '';
+
+  @override
+  void initState() {
+    if (widget.puzzleToEdit != null) {
+      isEditMode = true;
+      final puzzleToEdit = widget.puzzleToEdit!;
+      id = puzzleToEdit.id;
+      image = puzzleToEdit.image;
+      title = puzzleToEdit.title;
+      elementsCount = puzzleToEdit.elementsCount;
+      width = puzzleToEdit.width;
+      height = puzzleToEdit.height;
+      article = puzzleToEdit.article;
+      factory = puzzleToEdit.factory;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +69,9 @@ class _AddPuzzleFormState extends State<AddPuzzleForm> {
                 children: [
                   PuzzleImageFormField(
                     initialValue: image,
-                    onChanged: (value) => image = value,
+                    onChanged: (value) async {
+                      image = value;
+                    },
                   ),
                   PuzzleTextFormField(
                     title: 'Название*',
@@ -102,23 +125,32 @@ class _AddPuzzleFormState extends State<AddPuzzleForm> {
                 Expanded(
                   child: FilledButton(
                       onPressed: isAddButtonEnabled
-                          ? () {
-                              context.read<CatalogBloc>().add(CatalogAddPuzzle(
-                                  Puzzle(
-                                      null,
-                                      image!,
-                                      title!.trim(),
-                                      elementsCount!,
-                                      width!,
-                                      height!,
-                                      factory.trim(),
-                                      article.trim(),
-                                      false,
-                                      false)));
+                          ? () async {
+                              final puzzle = Puzzle(
+                                  id,
+                                  image!,
+                                  title!.trim(),
+                                  elementsCount!,
+                                  width!,
+                                  height!,
+                                  factory.trim(),
+                                  article.trim(),
+                                  false,
+                                  false);
+                              if (isEditMode) {
+                                context
+                                    .read<CatalogBloc>()
+                                    .add(CatalogEditPuzzle(puzzle));
+                              } else {
+                                context
+                                    .read<CatalogBloc>()
+                                    .add(CatalogAddPuzzle(puzzle));
+                              }
                               context.pop();
                             }
                           : null,
-                      child: const Text('Добавить пазл')),
+                      child:
+                          Text('${isEditMode ? 'Изменить' : 'Добавить'} пазл')),
                 ),
               ],
             )

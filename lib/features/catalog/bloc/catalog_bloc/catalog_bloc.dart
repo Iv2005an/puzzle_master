@@ -32,5 +32,13 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
         emit(CatalogFailure(e));
       }
     });
+    on<CatalogEditPuzzle>((event, emit) async {
+      await CatalogRepository.editPuzzle(event.puzzleToEdit);
+      try {
+        emit(CatalogLoaded(CatalogRepository.puzzles));
+      } catch (e) {
+        emit(CatalogFailure(e));
+      }
+    });
   }
 }

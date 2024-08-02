@@ -1,91 +1,111 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:puzzle_master/features/catalog/bloc/catalog_bloc/catalog_bloc.dart';
 
 import 'package:puzzle_master/repositories/catalog/models/puzzle.dart';
 import 'package:puzzle_master/services/converter_service.dart';
 
-import '../bloc/catalog_bloc/catalog_bloc.dart';
+import 'puzzle_data_dialog.dart';
+import 'puzzle_deleting_dialog.dart';
 
 class PuzzleCard extends StatelessWidget {
-  const PuzzleCard(this.puzzle, {super.key});
+  const PuzzleCard(this.puzzle, {this.isCompact = false, super.key});
 
   final Puzzle puzzle;
+  final bool isCompact;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    List<Widget> items = [
+    List<Widget> actionButtons = [
+      IconButton.outlined(
+        onPressed: () => showModalBottomSheet(
+            builder: (context) => PuzzleDeletingDialog(puzzle),
+            context: context),
+        icon: const Icon(Icons.delete_outline),
+      ),
+      IconButton.outlined(
+        onPressed: () => showModalBottomSheet(
+            useRootNavigator: true,
+            useSafeArea: true,
+            isDismissible: false,
+            isScrollControlled: true,
+            context: context,
+            builder: (context) => Padding(
+                  padding: MediaQuery.of(context).viewInsets,
+                  child: PuzzleDataDialog(
+                    puzzleToEdit: puzzle,
+                  ),
+                )),
+        icon: const Icon(Icons.edit_outlined),
+      ),
+      puzzle.isFavorite
+          ? IconButton.filled(
+              onPressed: () => context
+                  .read<CatalogBloc>()
+                  .add(CatalogEditPuzzle(puzzle.copyWith(isFavorite: false))),
+              icon: const Icon(Icons.favorite))
+          : IconButton.outlined(
+              onPressed: () => context
+                  .read<CatalogBloc>()
+                  .add(CatalogEditPuzzle(puzzle.copyWith(isFavorite: true))),
+              icon: const Icon(Icons.favorite_outline)),
+      const SizedBox(width: 4),
+      const Expanded(
+        // TODO: Логика
+        child: FilledButton(onPressed: null, child: Text('Сканирование')),
+      )
+    ];
+
+    List<Widget> children = [
       Text(
         puzzle.title,
-        style: textTheme.titleLarge,
+        style: Theme.of(context).textTheme.titleMedium,
       ),
-      Text(
-        'Характеристики:',
-        style: textTheme.bodySmall,
-      ),
-      Wrap(
-        spacing: 8,
-        children: [
-          Chip(
-            avatar: const Icon(Icons.extension_outlined),
-            label: Text('${puzzle.elementsCount}'),
-          ),
-          Chip(
-            avatar:
-                const RotatedBox(quarterTurns: 1, child: Icon(Icons.height)),
-            label: Text(ConverterService.doubleToString(puzzle.width)),
-          ),
-          Chip(
-            avatar: const Icon(Icons.height),
-            label: Text(ConverterService.doubleToString(puzzle.height)),
-          ),
-        ],
-      ),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Row(children: [
-          // TODO: Логика
-          IconButton.outlined(
-              onPressed: () => showModalBottomSheet(
-                  builder: (context) => PuzzleDeletingDialog(puzzle),
-                  context: context),
-              icon: const Icon(Icons.delete_outline)),
-          // TODO: Логика
-          IconButton.outlined(
-              onPressed: () {}, icon: const Icon(Icons.edit_outlined)),
-        ]),
-        Row(children: [
-          puzzle.isFavorite
-              // TODO: Логика
-              ? IconButton.filled(
-                  onPressed: () {}, icon: const Icon(Icons.favorite))
-              // TODO: Логика
-              : IconButton.outlined(
-                  onPressed: () {}, icon: const Icon(Icons.favorite_outline)),
-          const SizedBox(width: 4),
-          // TODO: Логика
-          FilledButton(onPressed: () {}, child: const Text('Сканирование')),
-        ]),
-      ])
+      Wrap(spacing: 8, children: [
+        Chip(
+          avatar: const Icon(Icons.extension_outlined),
+          label: Text('${puzzle.elementsCount} эл.'),
+        ),
+        Chip(
+          avatar: const RotatedBox(
+              quarterTurns: 1, child: Icon(Icons.height_outlined)),
+          label: Text('${ConverterService.doubleToString(puzzle.width)} см'),
+        ),
+        Chip(
+          avatar: const Icon(Icons.height_outlined),
+          label: Text('${ConverterService.doubleToString(puzzle.height)} см'),
+        ),
+      ]),
+      Row(children: actionButtons),
     ];
-    if (puzzle.article.isNotEmpty) items.insert(2, Text(puzzle.article));
-    if (puzzle.factory.isNotEmpty) items.insert(2, Text(puzzle.factory));
-    // return FractionallySizedBox(
-    //   widthFactor: 0.5,
-    //   heightFactor: 0.5,
-    //   child: Container(
-    //       color: Color((Random().nextDouble() * 0xFFFFFF).toInt())
-    //           .withOpacity(1.0)),
-    // );
+    List<Chip> optionalChips = [];
+    if (puzzle.article.isNotEmpty) {
+      optionalChips.add(Chip(
+        avatar: const Icon(Icons.numbers_outlined),
+        label: Text(puzzle.article),
+      ));
+      if (puzzle.factory.isNotEmpty) {
+        optionalChips.add(Chip(
+          avatar: const Icon(Icons.factory_outlined),
+          label: Text(puzzle.factory),
+        ));
+      }
+    }
+    if (optionalChips.isNotEmpty) {
+      children.insert(1, Wrap(spacing: 8, children: optionalChips));
+    }
+
     return Card.outlined(
-        child: Column(children: [
-      // ClipRRect(
-      //     borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-      //     child: Image.memory(puzzle.image, fit: BoxFit.fitWidth)),
-      Padding(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: Column(children: [
+        ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+            child: Image.memory(puzzle.image)),
+        Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, children: items))
-    ]));
+          child: Column(children: children),
+        )
+      ]),
+    );
   }
 }

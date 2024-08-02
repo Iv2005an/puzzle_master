@@ -17,6 +17,7 @@ class Puzzle extends Equatable {
       this.article,
       this.isFavorite,
       this.isInHistory);
+
   @HiveField(0)
   final int? id;
 
@@ -60,6 +61,15 @@ class Puzzle extends Equatable {
         isInHistory
       ];
 
-  Puzzle copyWithId(int id) => Puzzle(id, image, title, elementsCount, width,
-      height, factory, article, isFavorite, isInHistory);
+  Puzzle copyWith({int? id, bool? isFavorite}) => Puzzle(
+      id ?? this.id,
+      image,
+      title,
+      elementsCount,
+      width,
+      height,
+      factory,
+      article,
+      isFavorite ?? this.isFavorite,
+      isInHistory);
 }
