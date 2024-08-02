@@ -16,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
           children: [
             AppBar(
               title: const Text('Настройки'),
-              systemOverlayStyle: getSystemUiOverlayStyle(theme),
+              systemOverlayStyle: Themes.getSystemUiOverlayStyle(theme),
             ),
             const SelectThemeCard(),
             const SelectAccentColorCard(),

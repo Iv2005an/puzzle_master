@@ -14,9 +14,9 @@ import 'routing/router.dart';
 import 'themes/themes.dart';
 
 class App extends StatelessWidget {
-  const App(this._sharedPreferences, {super.key});
+  const App(this.sharedPreferences, {super.key});
 
-  final SharedPreferences _sharedPreferences;
+  final SharedPreferences sharedPreferences;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class App extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-              SettingsCubit(SettingsRepository(_sharedPreferences)),
+              SettingsCubit(SettingsRepository(sharedPreferences)),
         ),
         BlocProvider(
           create: (context) => CatalogBloc(),
@@ -33,7 +33,7 @@ class App extends StatelessWidget {
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           return DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
-            final (lightTheme, darkTheme) = getThemes(
+            final (lightTheme, darkTheme) = Themes.getThemes(
               lightDynamic,
               darkDynamic,
               state.isSystemAccentColor,
@@ -43,8 +43,8 @@ class App extends StatelessWidget {
                 ? PlatformDispatcher.instance.platformBrightness ==
                     Brightness.dark
                 : state.themeMode == ThemeMode.dark;
-            SystemChrome.setSystemUIOverlayStyle(
-                getSystemUiOverlayStyle(isDarkMode ? darkTheme : lightTheme));
+            SystemChrome.setSystemUIOverlayStyle(Themes.getSystemUiOverlayStyle(
+                isDarkMode ? darkTheme : lightTheme));
             return MaterialApp.router(
               routerConfig: router,
               themeMode: state.themeMode,
