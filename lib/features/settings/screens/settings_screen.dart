@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:puzzle_master/app/themes/themes.dart';
 import '../widgets/widgets.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -8,18 +7,16 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    return Center(
+    return const Center(
       child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppBar(
-              title: const Text('Настройки'),
-              systemOverlayStyle: Themes.getSystemUiOverlayStyle(theme),
-            ),
-            const SelectThemeCard(),
-            const SelectAccentColorCard(),
+            SectionTitle('Тема'),
+            SelectThemeCard(),
+            SelectAccentColorCard(),
+            SectionTitle('История'),
+            ClearSearchHistoryCard()
           ],
         ),
       ),
