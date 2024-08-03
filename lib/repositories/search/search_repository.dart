@@ -31,7 +31,6 @@ class SearchRepository {
       if (!factoryFilters.contains(puzzle.factory) &&
           puzzle.factory.toLowerCase().contains(searchText)) {
         factoryFilters.add(puzzle.factory);
-        continue;
       }
       if (!elementsCountFilters.contains('${puzzle.elementsCount}') &&
           '${puzzle.elementsCount}'.toLowerCase().contains(searchText)) {
