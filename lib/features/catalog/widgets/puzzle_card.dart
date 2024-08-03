@@ -57,7 +57,9 @@ class PuzzleCard extends StatelessWidget {
         child: FilledButton(onPressed: null, child: Text('Сканирование')),
       )
     ];
-
+    final inputChipBorder = RoundedRectangleBorder(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        side: BorderSide(color: Theme.of(context).colorScheme.primary));
     List<Widget> children = [
       Text(
         puzzle.title,
@@ -65,6 +67,7 @@ class PuzzleCard extends StatelessWidget {
       ),
       Wrap(spacing: 8, children: [
         InputChip(
+          shape: inputChipBorder,
           avatar: const Icon(Icons.extension_outlined),
           label: Text('${puzzle.elementsCount} эл.'),
           onPressed: () => context.read<CatalogBloc>().add(CatalogAddFilters(
@@ -90,6 +93,7 @@ class PuzzleCard extends StatelessWidget {
       ));
       if (puzzle.factory.isNotEmpty) {
         optionalChips.add(InputChip(
+            shape: inputChipBorder,
             avatar: const Icon(Icons.factory_outlined),
             label: Text(puzzle.factory),
             onPressed: () => context
