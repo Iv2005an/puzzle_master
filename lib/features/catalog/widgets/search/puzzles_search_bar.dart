@@ -35,8 +35,13 @@ class PuzzlesSearchBar extends StatelessWidget {
           // TODO: Логика вызова поиска по фото
           IconButton(onPressed: null, icon: Icon(Icons.camera_alt_outlined))
         ],
+        onChanged: (value) {
+          if (value.isEmpty) {
+            context.read<CatalogBloc>().add(const CatalogGetPuzzles(''));
+          }
+        },
         onSubmitted: (value) {
-          SearchRepository.addToHistory(value);
+          if (value.trim().isNotEmpty) SearchRepository.addToHistory(value);
           context.read<CatalogBloc>().add(CatalogGetPuzzles(value));
           if (context.canPop()) controller.closeView(value);
         },
@@ -45,9 +50,11 @@ class PuzzlesSearchBar extends StatelessWidget {
           if (controller.text.isEmpty) {
             final history = SearchRepository.history;
             if (history.isEmpty) {
-              suggestions.add(const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Center(child: Text('История пуста'))));
+              suggestions.add(Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                      child: Text('История пуста',
+                          style: Theme.of(context).textTheme.titleMedium))));
             } else {
               suggestions.addAll(history.map((e) => ListTile(
                   leading: const Icon(Icons.history),
@@ -61,16 +68,16 @@ class PuzzlesSearchBar extends StatelessWidget {
               suggestions.add(FiltersSuggestionCard(
                   'Производители:',
                   suggestionFilters.factoryFilters
-                      .map((e) =>
-                          SuggestionChip(e, Filters(factoryFilters: [e])))
+                      .map((e) => SuggestionChip(
+                          e, Filters(factoryFilters: [e]), controller))
                       .toList()));
             }
             if (suggestionFilters.elementsCountFilters.isNotEmpty) {
               suggestions.add(FiltersSuggestionCard(
                   'Количество элементов:',
                   suggestionFilters.elementsCountFilters
-                      .map((e) =>
-                          SuggestionChip(e, Filters(elementsCountFilters: [e])))
+                      .map((e) => SuggestionChip(
+                          e, Filters(elementsCountFilters: [e]), controller))
                       .toList()));
             }
             if (suggestionTitles.isNotEmpty) {

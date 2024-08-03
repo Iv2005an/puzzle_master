@@ -16,9 +16,9 @@ class SuggestionTile extends StatelessWidget {
     return ListTile(
       title: Text(title),
       onTap: () {
+        controller.closeView(title);
         SearchRepository.addToHistory(title);
         context.read<CatalogBloc>().add(CatalogGetPuzzles(title));
-        controller.closeView(title);
       },
     );
   }

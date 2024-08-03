@@ -11,65 +11,43 @@ part 'catalog_state.dart';
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   CatalogBloc() : super(CatalogInitial()) {
     on<CatalogGetPuzzles>((event, emit) {
+      final filters = Filters(
+          factoryFilters: _factoryFilters,
+          elementsCountFilters: _elementsCountFilters);
       try {
         _searchText = event.searchText;
-        emit(CatalogLoaded(CatalogRepository.getPuzzles(_searchText, _filters),
-            _searchText, _filters));
+        emit(CatalogLoaded(CatalogRepository.getPuzzles(_searchText, filters),
+            _searchText, filters));
       } catch (e) {
-        emit(CatalogFailure(e, _searchText, _filters));
+        emit(CatalogFailure(e, _searchText, filters));
       }
     });
     on<CatalogAddFilters>((event, emit) {
-      try {
-        _filters.factoryFilters.addAll(event.filters.factoryFilters);
-        _filters.elementsCountFilters
-            .addAll(event.filters.elementsCountFilters);
-        emit(CatalogLoaded(CatalogRepository.getPuzzles(_searchText, _filters),
-            _searchText, _filters));
-      } catch (e) {
-        emit(CatalogFailure(e, _searchText, _filters));
-      }
+      _factoryFilters.addAll(event.filters.factoryFilters);
+      _elementsCountFilters.addAll(event.filters.elementsCountFilters);
+      add(CatalogGetPuzzles(_searchText));
     });
     on<CatalogDeleteFilters>((event, emit) {
-      try {
-        _filters.factoryFilters.removeWhere(
-            (element) => event.filters.factoryFilters.contains(element));
-        _filters.elementsCountFilters.removeWhere(
-            (element) => event.filters.elementsCountFilters.contains(element));
-        emit(CatalogLoaded(CatalogRepository.getPuzzles(_searchText, _filters),
-            _searchText, _filters));
-      } catch (e) {
-        emit(CatalogFailure(e, _searchText, _filters));
-      }
+      _factoryFilters.removeWhere(
+          (element) => event.filters.factoryFilters.contains(element));
+      _elementsCountFilters.removeWhere(
+          (element) => event.filters.elementsCountFilters.contains(element));
+      add(CatalogGetPuzzles(_searchText));
     });
     on<CatalogAddPuzzle>((event, emit) async {
       await CatalogRepository.addPuzzle(event.newPuzzle);
-      try {
-        emit(CatalogLoaded(CatalogRepository.getPuzzles(_searchText, _filters),
-            _searchText, _filters));
-      } catch (e) {
-        emit(CatalogFailure(e, _searchText, _filters));
-      }
+      add(CatalogGetPuzzles(_searchText));
     });
     on<CatalogDeletePuzzle>((event, emit) async {
       await CatalogRepository.deletePuzzle(event.puzzleToDelete);
-      try {
-        emit(CatalogLoaded(CatalogRepository.getPuzzles(_searchText, _filters),
-            _searchText, _filters));
-      } catch (e) {
-        emit(CatalogFailure(e, _searchText, _filters));
-      }
+      add(CatalogGetPuzzles(_searchText));
     });
     on<CatalogEditPuzzle>((event, emit) async {
       await CatalogRepository.editPuzzle(event.puzzleToEdit);
-      try {
-        emit(CatalogLoaded(CatalogRepository.getPuzzles(_searchText, _filters),
-            _searchText, _filters));
-      } catch (e) {
-        emit(CatalogFailure(e, _searchText, _filters));
-      }
+      add(CatalogGetPuzzles(_searchText));
     });
   }
   String _searchText = '';
-  final _filters = const Filters();
+  final List<String> _factoryFilters = [];
+  final List<String> _elementsCountFilters = [];
 }
