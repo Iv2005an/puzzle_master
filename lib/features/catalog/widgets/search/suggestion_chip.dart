@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:puzzle_master/repositories/search/models/filters.dart';
 import 'package:puzzle_master/repositories/search/search_repository.dart';
 
 import '../../bloc/catalog_bloc/catalog_bloc.dart';
 
 class SuggestionChip extends StatelessWidget {
-  const SuggestionChip(this.title, this.filters, this.controller, {super.key});
+  const SuggestionChip(this.title, this.controller,
+      {this.factoryFilter = '', this.elementsCountFilter = '', super.key});
 
   final String title;
-  final Filters filters;
   final SearchController controller;
+  final String factoryFilter;
+  final String elementsCountFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,9 @@ class SuggestionChip extends StatelessWidget {
       onPressed: () {
         controller.closeView('');
         SearchRepository.addToHistory(title);
-        context.read<CatalogBloc>().add(CatalogAddFilters(filters));
+        context.read<CatalogBloc>().add(CatalogAddFilters(
+            factoryFilter: factoryFilter,
+            elementsCountFilter: elementsCountFilter));
       },
     );
   }

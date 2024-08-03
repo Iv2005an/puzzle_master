@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:puzzle_master/repositories/search/models/filters.dart';
 
 import '../bloc/catalog_bloc/catalog_bloc.dart';
 import '../widgets/widgets.dart';
@@ -16,8 +15,9 @@ class CatalogScreen extends StatelessWidget {
       onPanDown: (details) => FocusManager.instance.primaryFocus?.unfocus(),
       child: BlocBuilder<CatalogBloc, CatalogState>(
         builder: (context, state) {
-          final bloc = context.read<CatalogBloc>();
-          if (state is CatalogInitial) bloc.add(const CatalogGetPuzzles(''));
+          if (state is CatalogInitial) {
+            context.read<CatalogBloc>().add(const CatalogGetPuzzles(''));
+          }
           if (state is CatalogLoaded) {
             return DefaultTabController(
               length: 3,
@@ -33,8 +33,7 @@ class CatalogScreen extends StatelessWidget {
                           selected: true,
                           onSelected: (value) => context
                               .read<CatalogBloc>()
-                              .add(CatalogDeleteFilters(
-                                  Filters(factoryFilters: [e]))))),
+                              .add(CatalogDeleteFilters(factoryFilter: e)))),
                       ...state.filters.elementsCountFilters.map((e) =>
                           FilterChip(
                               label: Text('$e эл.'),
@@ -42,7 +41,7 @@ class CatalogScreen extends StatelessWidget {
                               onSelected: (value) => context
                                   .read<CatalogBloc>()
                                   .add(CatalogDeleteFilters(
-                                      Filters(elementsCountFilters: [e]))))),
+                                      elementsCountFilter: e)))),
                     ]),
                   ),
                   const TabBar(
@@ -86,8 +85,9 @@ class CatalogScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: FilledButton(
-                            onPressed: () =>
-                                bloc.add(CatalogGetPuzzles(state.searchText)),
+                            onPressed: () => context
+                                .read<CatalogBloc>()
+                                .add(CatalogGetPuzzles(state.searchText)),
                             child: const Text('Обновить')),
                       ),
                     ],

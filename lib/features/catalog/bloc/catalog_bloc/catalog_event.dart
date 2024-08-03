@@ -17,21 +17,25 @@ final class CatalogGetPuzzles extends CatalogEvent {
 }
 
 final class CatalogAddFilters extends CatalogEvent {
-  const CatalogAddFilters(this.filters);
+  const CatalogAddFilters(
+      {this.factoryFilter = '', this.elementsCountFilter = ''});
 
-  final Filters filters;
+  final String factoryFilter;
+  final String elementsCountFilter;
 
   @override
-  List<Object> get props => [filters];
+  List<Object> get props => [factoryFilter, elementsCountFilter];
 }
 
 final class CatalogDeleteFilters extends CatalogEvent {
-  const CatalogDeleteFilters(this.filters);
+  const CatalogDeleteFilters(
+      {this.factoryFilter = '', this.elementsCountFilter = ''});
 
-  final Filters filters;
+  final String factoryFilter;
+  final String elementsCountFilter;
 
   @override
-  List<Object> get props => [filters];
+  List<Object> get props => [factoryFilter, elementsCountFilter];
 }
 
 final class CatalogAddPuzzle extends CatalogEvent {

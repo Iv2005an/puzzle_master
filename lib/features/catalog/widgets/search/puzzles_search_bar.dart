@@ -68,21 +68,27 @@ class PuzzlesSearchBar extends StatelessWidget {
               suggestions.add(FiltersSuggestionCard(
                   'Производители:',
                   suggestionFilters.factoryFilters
-                      .map((e) => SuggestionChip(
-                          e, Filters(factoryFilters: [e]), controller))
+                      .map((e) =>
+                          SuggestionChip(e, controller, factoryFilter: e))
                       .toList()));
             }
             if (suggestionFilters.elementsCountFilters.isNotEmpty) {
               suggestions.add(FiltersSuggestionCard(
                   'Количество элементов:',
                   suggestionFilters.elementsCountFilters
-                      .map((e) => SuggestionChip(
-                          e, Filters(elementsCountFilters: [e]), controller))
+                      .map((e) =>
+                          SuggestionChip(e, controller, elementsCountFilter: e))
                       .toList()));
             }
             if (suggestionTitles.isNotEmpty) {
               suggestions.add(PuzzlesSuggestionCard(
                   'Пазлы:', suggestionTitles, controller));
+            } else {
+              suggestions.add(Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                      child: Text('Совпадения не найдены',
+                          style: Theme.of(context).textTheme.titleMedium))));
             }
           }
           return suggestions;

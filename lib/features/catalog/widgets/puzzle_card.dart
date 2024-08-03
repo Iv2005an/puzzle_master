@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/catalog_bloc/catalog_bloc.dart';
 
 import 'package:puzzle_master/repositories/catalog/models/puzzle.dart';
 import 'package:puzzle_master/services/converter_service.dart';
+
+import '../bloc/catalog_bloc/catalog_bloc.dart';
 
 import 'puzzle_data_dialog.dart';
 import 'puzzle_deleting_dialog.dart';
@@ -62,9 +64,11 @@ class PuzzleCard extends StatelessWidget {
         style: Theme.of(context).textTheme.titleMedium,
       ),
       Wrap(spacing: 8, children: [
-        Chip(
+        InputChip(
           avatar: const Icon(Icons.extension_outlined),
           label: Text('${puzzle.elementsCount} эл.'),
+          onPressed: () => context.read<CatalogBloc>().add(CatalogAddFilters(
+              elementsCountFilter: '${puzzle.elementsCount}')),
         ),
         Chip(
           avatar: const RotatedBox(
@@ -78,17 +82,19 @@ class PuzzleCard extends StatelessWidget {
       ]),
       Row(children: actionButtons),
     ];
-    List<Chip> optionalChips = [];
+    List<Widget> optionalChips = [];
     if (puzzle.article.isNotEmpty) {
       optionalChips.add(Chip(
         avatar: const Icon(Icons.numbers_outlined),
         label: Text(puzzle.article),
       ));
       if (puzzle.factory.isNotEmpty) {
-        optionalChips.add(Chip(
-          avatar: const Icon(Icons.factory_outlined),
-          label: Text(puzzle.factory),
-        ));
+        optionalChips.add(InputChip(
+            avatar: const Icon(Icons.factory_outlined),
+            label: Text(puzzle.factory),
+            onPressed: () => context
+                .read<CatalogBloc>()
+                .add(CatalogAddFilters(factoryFilter: puzzle.factory))));
       }
     }
     if (optionalChips.isNotEmpty) {

@@ -12,8 +12,8 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   CatalogBloc() : super(CatalogInitial()) {
     on<CatalogGetPuzzles>((event, emit) {
       final filters = Filters(
-          factoryFilters: _factoryFilters,
-          elementsCountFilters: _elementsCountFilters);
+          factoryFilters: List.from(_factoryFilters),
+          elementsCountFilters: List.from(_elementsCountFilters));
       try {
         _searchText = event.searchText;
         emit(CatalogLoaded(CatalogRepository.getPuzzles(_searchText, filters),
@@ -23,16 +23,26 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
       }
     });
     on<CatalogAddFilters>((event, emit) {
-      _factoryFilters.addAll(event.filters.factoryFilters);
-      _elementsCountFilters.addAll(event.filters.elementsCountFilters);
-      add(CatalogGetPuzzles(_searchText));
+      if (event.factoryFilter.isNotEmpty ||
+          event.elementsCountFilter.isNotEmpty) {
+        if (event.factoryFilter.isNotEmpty &&
+            !_factoryFilters.contains(event.factoryFilter)) {
+          _factoryFilters.add(event.factoryFilter);
+        }
+        if (event.elementsCountFilter.isNotEmpty &&
+            !_elementsCountFilters.contains(event.elementsCountFilter)) {
+          _elementsCountFilters.add(event.elementsCountFilter);
+        }
+        add(CatalogGetPuzzles(_searchText));
+      }
     });
     on<CatalogDeleteFilters>((event, emit) {
-      _factoryFilters.removeWhere(
-          (element) => event.filters.factoryFilters.contains(element));
-      _elementsCountFilters.removeWhere(
-          (element) => event.filters.elementsCountFilters.contains(element));
-      add(CatalogGetPuzzles(_searchText));
+      if (event.factoryFilter.isNotEmpty ||
+          event.elementsCountFilter.isNotEmpty) {
+        _factoryFilters.remove(event.factoryFilter);
+        _elementsCountFilters.remove(event.elementsCountFilter);
+        add(CatalogGetPuzzles(_searchText));
+      }
     });
     on<CatalogAddPuzzle>((event, emit) async {
       await CatalogRepository.addPuzzle(event.newPuzzle);
