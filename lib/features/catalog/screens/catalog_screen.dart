@@ -37,7 +37,7 @@ class CatalogScreen extends StatelessWidget {
                                   Filters(factoryFilters: [e]))))),
                       ...state.filters.elementsCountFilters.map((e) =>
                           FilterChip(
-                              label: Text(e),
+                              label: Text('$e эл.'),
                               selected: true,
                               onSelected: (value) => context
                                   .read<CatalogBloc>()
