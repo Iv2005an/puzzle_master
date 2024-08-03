@@ -13,27 +13,23 @@ class CatalogScreen extends StatelessWidget {
     return BlocBuilder<CatalogBloc, CatalogState>(
       builder: (context, state) {
         final bloc = context.read<CatalogBloc>();
-        if (state is CatalogInitial) bloc.add(CatalogGetPuzzles());
+        if (state is CatalogInitial) bloc.add(const CatalogGetPuzzles(''));
         if (state is CatalogLoaded) {
           return DefaultTabController(
             length: 3,
             child: Column(
               children: [
                 const SizedBox(height: 32),
-                const PuzzlesSearchBar(),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Wrap(
-                    spacing: 8,
-                    children: [
-                      Chip(label: Text('data')),
-                      Chip(label: Text('data')),
-                      Chip(label: Text('data')),
-                      Chip(label: Text('data')),
-                      Chip(label: Text('data')),
-                      Chip(label: Text('data')),
-                    ],
-                  ),
+                PuzzlesSearchBar(state.searchText, state.filters),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(spacing: 8, children: [
+                    FilterChip(
+                        label: const Text('filter'),
+                        selected: true,
+                        // Логика удаления фильтра
+                        onSelected: (value) {})
+                  ]),
                 ),
                 const TabBar(
                   tabs: [
@@ -65,13 +61,23 @@ class CatalogScreen extends StatelessWidget {
           );
         }
         if (state is CatalogFailure) {
-          return Center(
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Произошла ошибка, попробуйте снова'),
-                FilledButton(
-                    onPressed: () => bloc.add(CatalogGetPuzzles()),
-                    child: const Text('Обновить'))
+                Text('Произошла ошибка, попробуйте снова',
+                    style: Theme.of(context).textTheme.titleMedium),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton(
+                          onPressed: () =>
+                              bloc.add(CatalogGetPuzzles(state.searchText)),
+                          child: const Text('Обновить')),
+                    ),
+                  ],
+                )
               ],
             ),
           );

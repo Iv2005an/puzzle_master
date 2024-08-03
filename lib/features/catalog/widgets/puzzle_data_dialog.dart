@@ -27,25 +27,26 @@ class _PuzzleDataDialogState extends State<PuzzleDataDialog> {
   int? id;
   Uint8List? image;
   String? title;
+  String article = '';
+  String factory = '';
   int? elementsCount;
   double? width;
   double? height;
-  String article = '';
-  String factory = '';
 
   @override
   void initState() {
     if (widget.puzzleToEdit != null) {
       isEditMode = true;
       final puzzleToEdit = widget.puzzleToEdit!;
+
       id = puzzleToEdit.id;
       image = puzzleToEdit.image;
       title = puzzleToEdit.title;
+      article = puzzleToEdit.article;
+      factory = puzzleToEdit.factory;
       elementsCount = puzzleToEdit.elementsCount;
       width = puzzleToEdit.width;
       height = puzzleToEdit.height;
-      article = puzzleToEdit.article;
-      factory = puzzleToEdit.factory;
     }
     super.initState();
   }
@@ -130,11 +131,11 @@ class _PuzzleDataDialogState extends State<PuzzleDataDialog> {
                                   id,
                                   image!,
                                   title!.trim(),
+                                  article.trim(),
+                                  factory.trim(),
                                   elementsCount!,
                                   width!,
                                   height!,
-                                  factory.trim(),
-                                  article.trim(),
                                   false,
                                   false);
                               if (isEditMode) {

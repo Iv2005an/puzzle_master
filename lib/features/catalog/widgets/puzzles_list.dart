@@ -13,33 +13,34 @@ class PuzzlesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: isAddButton
-            ? FloatingActionButton(
-                elevation: 0,
-                tooltip: 'Добавить пазл',
-                onPressed: () => showModalBottomSheet(
-                      useRootNavigator: true,
-                      useSafeArea: true,
-                      isDismissible: false,
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (context) => Padding(
-                        padding: MediaQuery.of(context).viewInsets,
-                        child: const PuzzleDataDialog(),
-                      ),
+      floatingActionButton: isAddButton
+          ? FloatingActionButton(
+              elevation: 0,
+              tooltip: 'Добавить пазл',
+              onPressed: () => showModalBottomSheet(
+                    useRootNavigator: true,
+                    useSafeArea: true,
+                    isDismissible: false,
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) => Padding(
+                      padding: MediaQuery.of(context).viewInsets,
+                      child: const PuzzleDataDialog(),
                     ),
-                child: const Icon(Icons.add_photo_alternate_outlined))
-            : null,
-        body: puzzles.isEmpty
-            ? Center(
-                child: Text(
-                'Добавьте пазлы',
-                style: Theme.of(context).textTheme.displaySmall,
-              ))
-            : SingleChildScrollView(
-                child: Column(
-                    children: List.generate(
-                        puzzles.length, (index) => PuzzleCard(puzzles[index]))),
-              ));
+                  ),
+              child: const Icon(Icons.add_photo_alternate_outlined))
+          : null,
+      body: puzzles.isEmpty
+          ? Center(
+              child: Text(
+              'Пазлы не найдены',
+              style: Theme.of(context).textTheme.displaySmall,
+            ))
+          : SingleChildScrollView(
+              child: Column(
+                  children:
+                      puzzles.map((puzzle) => PuzzleCard(puzzle)).toList()),
+            ),
+    );
   }
 }

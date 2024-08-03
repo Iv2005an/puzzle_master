@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:puzzle_master/features/catalog/bloc/catalog_bloc/catalog_bloc.dart';
+import '../bloc/catalog_bloc/catalog_bloc.dart';
 
 import 'package:puzzle_master/repositories/catalog/models/puzzle.dart';
 import 'package:puzzle_master/services/converter_service.dart';
@@ -51,7 +51,7 @@ class PuzzleCard extends StatelessWidget {
               icon: const Icon(Icons.favorite_outline)),
       const SizedBox(width: 4),
       const Expanded(
-        // TODO: Логика
+        // TODO: Логика вызова сканирования
         child: FilledButton(onPressed: null, child: Text('Сканирование')),
       )
     ];

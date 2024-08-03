@@ -20,11 +20,11 @@ class PuzzleAdapter extends TypeAdapter<Puzzle> {
       fields[0] as int?,
       fields[1] as Uint8List,
       fields[2] as String,
-      fields[3] as int,
-      fields[4] as double,
-      fields[5] as double,
-      fields[6] as String,
-      fields[7] as String,
+      fields[3] as String,
+      fields[4] as String,
+      fields[5] as int,
+      fields[6] as double,
+      fields[7] as double,
       fields[8] as bool,
       fields[9] as bool,
     );
@@ -41,15 +41,15 @@ class PuzzleAdapter extends TypeAdapter<Puzzle> {
       ..writeByte(2)
       ..write(obj.title)
       ..writeByte(3)
-      ..write(obj.elementsCount)
-      ..writeByte(4)
-      ..write(obj.width)
-      ..writeByte(5)
-      ..write(obj.height)
-      ..writeByte(6)
-      ..write(obj.factory)
-      ..writeByte(7)
       ..write(obj.article)
+      ..writeByte(4)
+      ..write(obj.factory)
+      ..writeByte(5)
+      ..write(obj.elementsCount)
+      ..writeByte(6)
+      ..write(obj.width)
+      ..writeByte(7)
+      ..write(obj.height)
       ..writeByte(8)
       ..write(obj.isFavorite)
       ..writeByte(9)

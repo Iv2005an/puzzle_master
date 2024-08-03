@@ -10,11 +10,11 @@ class Puzzle extends Equatable {
       this.id,
       this.image,
       this.title,
+      this.article,
+      this.factory,
       this.elementsCount,
       this.width,
       this.height,
-      this.factory,
-      this.article,
       this.isFavorite,
       this.isInHistory);
 
@@ -28,19 +28,19 @@ class Puzzle extends Equatable {
   final String title;
 
   @HiveField(3)
-  final int elementsCount;
+  final String article;
 
   @HiveField(4)
-  final double width;
-
-  @HiveField(5)
-  final double height;
-
-  @HiveField(6)
   final String factory;
 
+  @HiveField(5)
+  final int elementsCount;
+
+  @HiveField(6)
+  final double width;
+
   @HiveField(7)
-  final String article;
+  final double height;
 
   @HiveField(8)
   final bool isFavorite;
@@ -52,11 +52,11 @@ class Puzzle extends Equatable {
   List<Object?> get props => [
         image,
         title,
+        article,
+        factory,
         elementsCount,
         width,
         height,
-        factory,
-        article,
         isFavorite,
         isInHistory
       ];
@@ -65,11 +65,11 @@ class Puzzle extends Equatable {
       id ?? this.id,
       image,
       title,
+      article,
+      factory,
       elementsCount,
       width,
       height,
-      factory,
-      article,
       isFavorite ?? this.isFavorite,
       isInHistory);
 }

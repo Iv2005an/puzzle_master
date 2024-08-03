@@ -7,7 +7,32 @@ sealed class CatalogEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class CatalogGetPuzzles extends CatalogEvent {}
+final class CatalogGetPuzzles extends CatalogEvent {
+  const CatalogGetPuzzles(this.searchText);
+
+  final String searchText;
+
+  @override
+  List<Object> get props => [searchText];
+}
+
+final class CatalogAddFilters extends CatalogEvent {
+  const CatalogAddFilters(this.filters);
+
+  final Filters filters;
+
+  @override
+  List<Object> get props => [filters];
+}
+
+final class CatalogDeleteFilters extends CatalogEvent {
+  const CatalogDeleteFilters(this.filters);
+
+  final Filters filters;
+
+  @override
+  List<Object> get props => [filters];
+}
 
 final class CatalogAddPuzzle extends CatalogEvent {
   const CatalogAddPuzzle(this.newPuzzle);
