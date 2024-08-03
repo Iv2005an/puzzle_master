@@ -50,6 +50,7 @@ class Puzzle extends Equatable {
 
   @override
   List<Object?> get props => [
+        id,
         image,
         title,
         article,
