@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:puzzle_master/repositories/search/models/filters.dart';
 
 import '../bloc/catalog_bloc/catalog_bloc.dart';
 import '../widgets/widgets.dart';
@@ -24,11 +25,18 @@ class CatalogScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Wrap(spacing: 8, children: [
-                    FilterChip(
-                        label: const Text('filter'),
+                    ...state.filters.factoryFilters.map((e) => FilterChip(
+                        label: Text(e),
                         selected: true,
-                        // Логика удаления фильтра
-                        onSelected: (value) {})
+                        onSelected: (value) => context.read<CatalogBloc>().add(
+                            CatalogDeleteFilters(
+                                Filters(factoryFilters: [e]))))),
+                    ...state.filters.elementsCountFilters.map((e) => FilterChip(
+                        label: Text(e),
+                        selected: true,
+                        onSelected: (value) => context.read<CatalogBloc>().add(
+                            CatalogDeleteFilters(
+                                Filters(elementsCountFilters: [e]))))),
                   ]),
                 ),
                 const TabBar(
